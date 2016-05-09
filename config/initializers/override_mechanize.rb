@@ -1,4 +1,4 @@
-class Mechanize::HTTP::Agent
+Mechanize::HTTP::Agent.class_eval do
   MAX_RESET_RETRIES = 10
 
   # We need to replace the core Mechanize HTTP method:
