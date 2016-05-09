@@ -5,19 +5,28 @@ module Scraper
 		artist_url = artist.gsub(' ', '-')
 
 		page = agent.get('http://www.genius.com/artists/' + artist_url)
-		pagination_links = page.links_with(css: '.more')
-		paginations_links.each do |link|
+		pagination_links = page.links_with(href: /for_artist_page/)
+		pagination_links.each do |link|
 			link.click
 		end
 
 		song_links = page.links_with(href: /#{artist_url}.+lyrics/i)
+		
+		song = song_links[0].click
+		lyrics = song.css('p')[0].text.downcase.gsub(/\[.*\]/, '')
+		word_array = lyrics.split(/\s+/)
+
+		counts = {}
+		word_array.each do |word|
+			if counts[word]
+				counts[word] += 1
+			else
+				counts[word] = 1
+			end
+		end
+		puts counts
+
 	end
-
-			# document.getElementsByClassName('pagination')[0].firstChild.click()
-# TypeError: document.getElementsByClassName(...)[0] is undefined
-
-# paginate = page.css('div.pagination a').length
- # => 9 
 
 	def search_azlyrics(artist)
 		agent = Mechanize.new
@@ -34,7 +43,7 @@ module Scraper
 		# end
 	end
 
-	def parse_song(link)
+	def parse_azlyrics_song(link)
 		page = link.click
 		lyrics = page.css('div.ringtone~div')[0].children
 		
