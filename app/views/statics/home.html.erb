@@ -1,1 +1,14 @@
-Hello, world :)
+<%= form_tag("/artists", method: "post") do %>  
+    <%= label_tag(:name, "Artist Name") %>
+    <%= text_field_tag :name, params[:name], id: "artist-name-input" %>
+    <%= submit_tag("Go!", id:"submit-artist-button") %>
+<% end %>
+
+<br>
+<div id="artist-name">Artist Data</div>
+<div id="count-table">
+    <div class="table-row">
+        <div class="word-col">apple</div>
+		<div class="count-col">5</div>
+	</div>
+</div>
