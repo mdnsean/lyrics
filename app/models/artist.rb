@@ -31,9 +31,10 @@ class Artist < ActiveRecord::Base
 
         # if it works, create new Artist, save a_id in a variable vv
         a = Artist.new(name: artist)
-        if a.save
+        begin
+            a.save
             puts 'Artist saved: ' + artist
-        else
+        rescue ActiveRecord::RecordNotUnique
             puts 'Error saving, or artist already exists'
             return # uncomment after debug
         end
