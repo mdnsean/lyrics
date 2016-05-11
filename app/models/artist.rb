@@ -1,6 +1,6 @@
 class Artist < ActiveRecord::Base
     has_many :wordcounts
-    validates :name, presence: true
+    validates :name, presence: true, uniqueness: true
 
     before_create :normalize_name
 
@@ -30,6 +30,17 @@ class Artist < ActiveRecord::Base
         end
 
         # if it works, create new Artist, save a_id in a variable vv
+        Artist.create(name: artist)
+        a = Artist.new
+        if a.save
+            puts 'Artist saved: ' + artist
+        else
+            puts 'Error saving, or artist already exists'
+            return
+        end
+
+        artist_id = a.id
+        return # just 4 debuggin
 
         pagination_links = page.links_with(href: /for_artist_page/)
         pagination_links.each do |link|
