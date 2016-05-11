@@ -1,4 +1,4 @@
-<%= form_tag("/artists", method: "post") do %>  
+<%= form_tag("/artists/search", method: "post") do %>  
     <%= label_tag(:name, "Artist Name") %>
     <%= text_field_tag :name, params[:name], id: "artist-name-input" %>
     <%= submit_tag("Go!", id:"submit-artist-button") %>

@@ -1,7 +1,9 @@
 class ArtistsController < ApplicationController
-    def create
-        # only if artist NOT in SQL, and found in genius
-        @artist = Artist.new(artist_params)
+    def search
+        # in routes.rb: add [POST] /artists/search
+
+        # @counts_data = [artist.rb stuff]
+        # in home.html.erb: render counts_data
     end
 
     private
