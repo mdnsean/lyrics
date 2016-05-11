@@ -5,7 +5,7 @@ class Artist < ActiveRecord::Base
     before_create :normalize_name
 
     def normalize_name
-        self.name = self.name.downcase.gsub(/\s/, ' ')
+        self.name = self.name.downcase.gsub(/\s+/, ' ')
     end
 
     def display_word_counts(artist)
@@ -30,17 +30,16 @@ class Artist < ActiveRecord::Base
         end
 
         # if it works, create new Artist, save a_id in a variable vv
-        Artist.create(name: artist)
-        a = Artist.new
+        a = Artist.new(name: artist)
         if a.save
             puts 'Artist saved: ' + artist
         else
             puts 'Error saving, or artist already exists'
-            return
+            return # uncomment after debug
         end
 
         artist_id = a.id
-        return # just 4 debuggin
+        # return # just 4 debuggin
 
         pagination_links = page.links_with(href: /for_artist_page/)
         pagination_links.each do |link|
@@ -61,9 +60,11 @@ class Artist < ActiveRecord::Base
                 counts[word] = 1
             end
         end
-        puts counts
+        return counts
 
-        #for counts.each do |word, count|
+        # counts.each do |word, count|
+            # w = wordcount.new
+            # 
             # SQL insert: word_counts.new(artist_id, word, count)
         # end
     end
