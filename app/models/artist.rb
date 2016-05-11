@@ -37,12 +37,12 @@ class Artist < ActiveRecord::Base
 	            a.save
 	            puts 'Artist saved: ' + artist
 	        rescue ActiveRecord::RecordNotUnique
-	            puts 'Error saving'
+	            puts 'Error: RecordNotUnique'
 	        end
         end
         artist_id = a.id
         puts 'artist_id = ' + artist_id.to_s
-        return # just 4 debug
+        # return # just 4 debug
 
         pagination_links = page.links_with(href: /for_artist_page/)
         pagination_links.each do |link|
@@ -65,10 +65,14 @@ class Artist < ActiveRecord::Base
         end
         return counts
 
-        # counts.each do |word, count|
-            # w = wordcount.new
-            # 
-            # SQL insert: word_counts.new(artist_id, word, count)
-        # end
+        counts.each do |word, count|
+            w = wordcount.new(artist_id: a_id, word: word, count: count)
+			begin
+	            w.save
+	            puts 'Saved word: ' + word + ', count: ' + count.to_s
+	        rescue ActiveRecord::RecordNotUnique
+	            puts 'Error: RecordNotUnique'
+	        end
+        end
     end
 end
