@@ -2,17 +2,15 @@ class Artist < ActiveRecord::Base
     has_many :wordcounts
     validates :name, presence: true, uniqueness: true
 
-    before_create :normalize_name
-
-    def normalize_name
-        self.name = self.name.downcase.gsub(/\s+/, ' ')
+    def normalize_name(name)
+        name = name.downcase.gsub(/\s+/, ' ')
     end
 
-    def display_word_counts(artist)
-        # add artist to db
-        if !Artist.where(name: artist).exists?
+    def get_word_counts(artist)
+        artist = normalize_name(artist)
+        # if !Artist.where(name: artist).exists?
             search_genius(artist)
-        end
+        # end
         
         #  return SQL query: [counts.select(word,count).where(artist_id = a_id and 
         # .order(count))] as counts_data
@@ -30,17 +28,21 @@ class Artist < ActiveRecord::Base
         end
 
         # if it works, create new Artist, save a_id in a variable vv
-        a = Artist.new(name: artist)
-        begin
-            a.save
-            puts 'Artist saved: ' + artist
-        rescue ActiveRecord::RecordNotUnique
-            puts 'Error saving, or artist already exists'
-            return # uncomment after debug
+        a = Artist.where(name: artist)[0]
+        if !a.nil?
+        	puts 'Artist already exists'
+        else
+	        a = Artist.new(name: artist)
+	        begin
+	            a.save
+	            puts 'Artist saved: ' + artist
+	        rescue ActiveRecord::RecordNotUnique
+	            puts 'Error saving'
+	        end
         end
-
         artist_id = a.id
-        # return # just 4 debuggin
+        puts 'artist_id = ' + artist_id.to_s
+        return # just 4 debug
 
         pagination_links = page.links_with(href: /for_artist_page/)
         pagination_links.each do |link|
