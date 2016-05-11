@@ -16,13 +16,18 @@ class Artist < ActiveRecord::Base
         
         #  return SQL query: [counts.select(word,count).where(artist_id = a_id and 
         # .order(count))] as counts_data
+    end
 
     def search_genius(artist)
         agent = Mechanize.new
         artist_url = artist.gsub(' ', '-')
 
-        # try this, if it fails, return empty
-        page = agent.get('http://www.genius.com/artists/' + artist_url)
+        begin
+            page = agent.get('http://www.genius.com/artists/' + artist_url)
+        rescue Mechanize::ResponseCodeError
+            puts 'Artist not found'
+            return
+        end
 
         # if it works, create new Artist, save a_id in a variable vv
 
@@ -47,10 +52,8 @@ class Artist < ActiveRecord::Base
         end
         puts counts
 
-
         #for counts.each do |word, count|
             # SQL insert: word_counts.new(artist_id, word, count)
-
+        # end
     end
-
 end
