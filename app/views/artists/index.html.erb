@@ -1,25 +1,3 @@
-<%= form_tag("/search", method: "post") do %>  
-  <%= label_tag(:name, "Search New Artist") %>
-  <%= text_field_tag :name, params[:name], id: "artist-name-input" %>
-  <%= submit_tag("Go!", id:"submit-artist-button") %>
-<% end %>
-
-<div><%= flash[:notice] %></div>
-
-<ul id="artist-list">Artists
-  <li><button class="get-artist-button">Sample Artist</button></li>
-  <% @artists.each do |artist| %>
-    <li>
-      <button class="get-artist-button" name="<%= artist.id %>">
-        <%= artist.name %>
-      </button>
-      <%= button_to "X", artist_path(artist.id), method: :delete %>
-    </li>
-  <% end %>
-</ul>
-
-<table id="wc-table">Word Counts
-  <tr>
-    <td>Word</td><td>#</td>
-  </tr>
-</table>
+<%= render 'search_bar' %>
+<%= render 'artist_list' %>
+<%= render 'word_counts_table' %>
