@@ -40,7 +40,7 @@ class Artist < ActiveRecord::Base
 
         # Click all song links
         song_links = page.links_with(href: /#{artist_url}.+lyrics/i)
-        click_all_song_links(artist_object, artist, song_links)
+        scrape_all_song_links(artist_object, artist, song_links, 3)
     end
 
     def self.create_artist(artist)
@@ -60,27 +60,29 @@ class Artist < ActiveRecord::Base
         return a
     end
 
-    def self.click_all_song_links(artist_object, artist, song_links)
-        # only clicks first song (for now)
+    def self.scrape_all_song_links(artist_object, artist, song_links, range)
         puts "song links = " + song_links.to_s
-
-        song = song_links[0].click
-        lyrics = song.css('p')[0].text.downcase.gsub(/\[.*\]/, '')
-        word_array = lyrics.split(/\s+/)
-
-        counts_hash = {}
-        word_array.each do |word|
-            word = word.gsub(/\W/, '')
-            if counts_hash[word]
-                counts_hash[word] += 1
-            else
-                counts_hash[word] = 1
+        
+        # Scrape all songs from {0...range}
+        song_links[0...range].each do |link|
+            song = link.click
+            lyrics = song.css('p')[0].text.downcase.gsub(/\[.*\]/, '')
+            word_array = lyrics.split(/\s+/) # find lyrics on page
+            
+            counts_hash = {} # count this song's word frequencies
+            word_array.each do |word|
+                word = word.gsub(/\W/, '')
+                if counts_hash[word]
+                    counts_hash[word] += 1
+                else
+                    counts_hash[word] = 1
+                end
             end
-        end
-        puts counts_hash
+            puts counts_hash
 
-        # Add WC's to database
-        insert_wordcounts(artist_object, counts_hash)
+            # Add WC's to database
+            insert_wordcounts(artist_object, counts_hash)
+        end
     end
 
     def self.insert_wordcounts(artist_object, counts_hash)
