@@ -55,6 +55,7 @@ class Artist < ActiveRecord::Base
 
         counts = {}
         word_array.each do |word|
+        	word = word.gsub(/\W/, '')
             if counts[word]
                 counts[word] += 1
             else
