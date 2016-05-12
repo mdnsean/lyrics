@@ -8,12 +8,11 @@ class Artist < ActiveRecord::Base
 
     def get_wordcounts(artist)
         artist = normalize_name(artist)
-        # if !Artist.where(name: artist).exists?
+        if !Artist.where(name: artist).exists?
             search_genius(artist)
-        # end
-        
-        #  return SQL query: [counts.select(word,count).where(artist_id = a_id and 
-        # .order(count))] as counts_data
+        end
+        a_id = Artist.select('id').where(name: artist)
+        Wordcount.select('word, count').where(artist_id: a_id).order(count: :desc)
     end
 
     def search_genius(artist)
