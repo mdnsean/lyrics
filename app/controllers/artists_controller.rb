@@ -1,4 +1,9 @@
 class ArtistsController < ApplicationController
+    
+    def index
+    	@artists = Artist.select('name').all
+    end
+
     def search
         Artist.get_wordcounts(params[:name])
         @a_id = Artist.select('id').where(name: params[:name])
