@@ -6,7 +6,7 @@ class Artist < ActiveRecord::Base
         name = name.downcase.gsub(/\s+/, ' ')
     end
 
-    def get_word_counts(artist)
+    def get_wordcounts(artist)
         artist = normalize_name(artist)
         # if !Artist.where(name: artist).exists?
             search_genius(artist)
@@ -37,11 +37,10 @@ class Artist < ActiveRecord::Base
 	            a.save
 	            puts 'Artist saved: ' + artist
 	        rescue ActiveRecord::RecordNotUnique
-	            puts 'Error: RecordNotUnique'
+	            puts 'Already saved: ' + artist
 	        end
         end
-        artist_id = a.id
-        puts 'artist_id = ' + artist_id.to_s
+        puts 'artist_id = ' + a.id.to_s
         # return # just 4 debug
 
         pagination_links = page.links_with(href: /for_artist_page/)
@@ -63,15 +62,19 @@ class Artist < ActiveRecord::Base
                 counts[word] = 1
             end
         end
-        return counts
+        puts counts
+        insert_wordcounts(a, counts)
+    end
 
-        counts.each do |word, count|
-            w = wordcount.new(artist_id: a_id, word: word, count: count)
+    def insert_wordcounts(artist, counts_hash)
+		counts_hash.each do |word, count|
+            w = Wordcount.new(word: word, count: count)
+            w.artist = artist
 			begin
 	            w.save
 	            puts 'Saved word: ' + word + ', count: ' + count.to_s
 	        rescue ActiveRecord::RecordNotUnique
-	            puts 'Error: RecordNotUnique'
+	            puts 'Already saved: ' + word + ', count: ' + count.to_s
 	        end
         end
     end
