@@ -1,14 +1,13 @@
 <%= form_tag("/search", method: "post") do %>  
-    <%= label_tag(:name, "Artist Name") %>
+    <%= label_tag(:name, "Search New Artist") %>
     <%= text_field_tag :name, params[:name], id: "artist-name-input" %>
     <%= submit_tag("Go!", id:"submit-artist-button") %>
 <% end %>
 
 <br>
-<div id="artist-name">Artist Data</div>
-<div id="count-table">
+<div>Artists</div>
+<div id="artist-list">
     <div class="table-row">
-        <div class="word-col">apple</div>
-		<div class="count-col">5</div>
+        <button class="get-artist-button">Sample Artist</button>
 	</div>
 </div>
