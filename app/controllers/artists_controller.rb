@@ -12,11 +12,10 @@ class ArtistsController < ApplicationController
     end
 
     def search
-        Artist.get_wordcounts(params[:name])
-        @a_id = Artist.select('id').where(name: params[:name])
-        @wc_data = Wordcount.select('word, count').
-                   where(artist_id: @a_id).
-         		   order(count: :desc)
+        if Artist.get_wordcounts(params[:name]).nil?
+            flash[:notice] = "Artist not found, or already in database"
+        end
+        redirect_to root_url
     end
 
     private

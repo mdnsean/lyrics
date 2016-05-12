@@ -10,9 +10,11 @@ class Artist < ActiveRecord::Base
         artist = normalize_name(artist)
         if !Artist.where(name: artist).exists?
             search_genius(artist)
+        else
+            return
         end
-        a_id = Artist.select('id').where(name: artist)
-        Wordcount.select('word, count').where(artist_id: a_id).order(count: :desc)
+        # a_id = Artist.select('id').where(name: artist)
+        # Wordcount.select('word, count').where(artist_id: a_id).order(count: :desc)
     end
 
     def self.search_genius(artist)

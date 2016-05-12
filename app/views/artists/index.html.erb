@@ -4,6 +4,8 @@
   <%= submit_tag("Go!", id:"submit-artist-button") %>
 <% end %>
 
+<div><%= flash[:notice] %></div>
+
 <ul id="artist-list">Artists
   <li><button class="get-artist-button">Sample Artist</button></li>
   <% @artists.each do |artist| %>
