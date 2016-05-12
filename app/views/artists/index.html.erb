@@ -7,8 +7,10 @@
 <br>
 <div>Artists</div>
 <ul id="artist-list">
-    <li><button class="get-artist-button">Sample Artist</button></li>
-    <% @artists.each do |artist| %>
-      <li><button class="get-artist-button"><%= artist.name %></button></li>
-    <% end %>
+  <li><button class="get-artist-button">Sample Artist</button></li>
+  <% @artists.each do |artist| %>
+    <li><button class="get-artist-button" name="<%= artist.id %>">
+      <%= artist.name %>
+    </button></li>
+  <% end %>
 </div>

@@ -1,7 +1,7 @@
 class ArtistsController < ApplicationController
     
     def index
-    	@artists = Artist.select('name').all
+    	@artists = Artist.all
     end
 
     def search
