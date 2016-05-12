@@ -2,11 +2,11 @@ class Artist < ActiveRecord::Base
     has_many :wordcounts
     validates :name, presence: true, uniqueness: true
 
-    def normalize_name(name)
+    def self.normalize_name(name)
         name = name.downcase.gsub(/\s+/, ' ')
     end
 
-    def get_wordcounts(artist)
+    def self.get_wordcounts(artist)
         artist = normalize_name(artist)
         if !Artist.where(name: artist).exists?
             search_genius(artist)
@@ -15,7 +15,7 @@ class Artist < ActiveRecord::Base
         Wordcount.select('word, count').where(artist_id: a_id).order(count: :desc)
     end
 
-    def search_genius(artist)
+    def self.search_genius(artist)
         agent = Mechanize.new
         artist_url = artist.gsub(' ', '-')
 
@@ -66,7 +66,7 @@ class Artist < ActiveRecord::Base
         insert_wordcounts(a, counts)
     end
 
-    def insert_wordcounts(artist, counts_hash)
+    def self.insert_wordcounts(artist, counts_hash)
 		counts_hash.each do |word, count|
             w = Wordcount.new(word: word, count: count)
             w.artist = artist

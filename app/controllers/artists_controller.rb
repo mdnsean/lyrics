@@ -1,8 +1,9 @@
 class ArtistsController < ApplicationController
     def search
-        # in routes.rb: add [POST] /artists/search?artist=
-        @wc_data = Artist.get_wordcounts(params[:artist])
-        # in home.html.erb: render counts_data
+        Artist.get_wordcounts(params[:name])
+        @a_id = Artist.select('id').where(name: params[:name])
+        @wc_data = Wordcount.select('word, count').where(artist_id: @a_id).
+         		   order(count: :desc)
     end
 
     private
