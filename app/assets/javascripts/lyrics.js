@@ -25,8 +25,7 @@ var code = (function() {
             var onload = function(xhr) {
                 if (xhr.status === 200) {
                     response = (JSON.parse(xhr.responseText));
-                    console.log("Response: " + response.wc_data);
-                    // displayWordcounts(response.wc_data);
+                    displayWordcounts(response.wc_data);
                 } else {
                     console.log("Status code: " + xhr.statusText);
                 }
@@ -35,6 +34,16 @@ var code = (function() {
 
         }
         e.stopPropagation();
+    };
+
+    var displayWordcounts = function(data) {
+        var table = document.getElementById("wc-table");
+        table.innerHTML = "";
+        for (var i = 0; i < data.length; i++) {
+            table.innerHTML += "<tr><td>" + data[i].word
+                            + "</td><td>" + data[i].count
+                            + "</td></tr>";
+        }
     };
 
     var start = function() {

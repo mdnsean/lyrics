@@ -4,13 +4,17 @@
   <%= submit_tag("Go!", id:"submit-artist-button") %>
 <% end %>
 
-<br>
-<div>Artists</div>
-<ul id="artist-list">
+<ul id="artist-list">Artists
   <li><button class="get-artist-button">Sample Artist</button></li>
   <% @artists.each do |artist| %>
     <li><button class="get-artist-button" name="<%= artist.id %>">
       <%= artist.name %>
     </button></li>
   <% end %>
-</div>
+</ul>
+
+<table id="wc-table">Word Counts
+  <tr>
+    <td>Word</td><td>#</td>
+  </tr>
+</table>
