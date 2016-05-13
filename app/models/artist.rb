@@ -40,7 +40,7 @@ class Artist < ActiveRecord::Base
 
         # Click all song links
         song_links = page.links_with(href: /#{artist_url}.+lyrics/i)
-        scrape_all_song_links(artist_object, artist, song_links, 1)
+        scrape_all_song_links(artist_object, artist, song_links, 4)
     end
 
     def self.create_artist(artist)
@@ -87,9 +87,15 @@ class Artist < ActiveRecord::Base
 
     def self.insert_wordcounts(artist_object, counts_hash)
 		counts_hash.each do |word, count|
-            w = Wordcount.new(word: word, count: count)
-            w.artist = artist_object
-			begin
+            w = Wordcount.where(word: word, artist_id: artist_object.id)[0]
+            if !w.nil?
+                w.count += count
+            else
+                w = Wordcount.new(word: word, count: count)
+                w.artist = artist_object
+			end
+
+            begin
 	            w.save
 	            puts 'Saved word: ' + word + ', count: ' + count.to_s
 	        rescue ActiveRecord::RecordNotUnique
