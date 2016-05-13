@@ -24,7 +24,7 @@ var code = (function() {
             };
             var onload = function(xhr) {
                 if (xhr.status === 200) {
-                    response = (JSON.parse(xhr.responseText));
+                    var response = (JSON.parse(xhr.responseText));
                     displayWordcounts(response.wc_data);
                 } else {
                     console.log("Status code: " + xhr.statusText);
