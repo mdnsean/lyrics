@@ -1,5 +1,5 @@
 class Artist < ActiveRecord::Base
-    has_many :wordcounts
+    has_many :wordcounts, dependent: :destroy
     validates :name, presence: true, uniqueness: true
 
     def self.normalize_name(name)
@@ -40,7 +40,7 @@ class Artist < ActiveRecord::Base
 
         # Click all song links
         song_links = page.links_with(href: /#{artist_url}.+lyrics/i)
-        scrape_all_song_links(artist_object, artist, song_links, 3)
+        scrape_all_song_links(artist_object, artist, song_links, 1)
     end
 
     def self.create_artist(artist)
