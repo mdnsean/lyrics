@@ -7,8 +7,10 @@ class ArtistsController < ApplicationController
     def show
         @wc_data = Wordcount.select('word, count').
                    where(artist_id: params[:id]).
-                   order(count: :desc)
-        render json: {wc_data: @wc_data}
+                   order(count: :desc).limit(8)
+        @artist = Artist.where(id: params[:id])[0]
+        render json: {wc_data: @wc_data,
+                      artist: @artist}
     end
 
     def search

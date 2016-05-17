@@ -25,7 +25,7 @@ var code = (function() {
             var onload = function(xhr) {
                 if (xhr.status === 200) {
                     var response = (JSON.parse(xhr.responseText));
-                    displayWordcounts(response.wc_data);
+                    displayWordcounts(response.wc_data, response.artist);
                 } else {
                     console.log("Status code: " + xhr.statusText);
                 }
@@ -36,12 +36,14 @@ var code = (function() {
         e.stopPropagation();
     };
 
-    var displayWordcounts = function(data) {
+    // artists#show
+    var displayWordcounts = function(wc_data, artist) {
         var table = document.getElementById("wc-table");
         table.innerHTML = "";
-        for (var i = 0; i < data.length; i++) {
-            table.innerHTML += "<tr><td>" + data[i].word
-                            + "</td><td>" + data[i].count
+        table.innerHTML += artist.name
+        for (var i = 0; i < wc_data.length; i++) {
+            table.innerHTML += "<tr><td>" + wc_data[i].word
+                            + "</td><td>" + wc_data[i].count
                             + "</td></tr>";
         }
     };
@@ -51,7 +53,7 @@ var code = (function() {
         window.chart = new Highcharts.Chart({
             chart: {
                 renderTo: container,
-                height: 200,
+                height: 400,
                 type: 'bar'
             },
             title: {
@@ -76,7 +78,7 @@ var code = (function() {
         window.chart = new Highcharts.Chart({
             chart: {
                 renderTo: container2,
-                height: 200,
+                height: 400,
                 type: 'bar'
             },
             title: {
