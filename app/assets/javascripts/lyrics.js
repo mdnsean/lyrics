@@ -41,15 +41,21 @@ var code = (function() {
         var table = document.getElementById("wc-table");
         table.innerHTML = "";
         table.innerHTML += artist.name
+
+        var words = [];
+        var counts = [];
         for (var i = 0; i < wc_data.length; i++) {
             table.innerHTML += "<tr><td>" + wc_data[i].word
                             + "</td><td>" + wc_data[i].count
                             + "</td></tr>";
+            words.push(wc_data[i].word);
+            counts.push(wc_data[i].count);
         }
+        initHighCharts(words, counts, artist.name)
     };
 
     // Highcharts
-    var initHighCharts = function() {
+    var initHighCharts = function(words, counts, artist_name) {
         window.chart = new Highcharts.Chart({
             chart: {
                 renderTo: container,
@@ -60,7 +66,7 @@ var code = (function() {
                 text: 'Everyone\'s Favorite Words'
             },
             xAxis: {
-                // categories: array of wc.words
+                categories: words
             },
             yAxis: {
                 title: {
@@ -68,8 +74,8 @@ var code = (function() {
                 }
             },
             series: [{
-                // name: get artist.name,
-                // data: array of wc.counts
+                name: artist_name,
+                data: counts
             }, {
                 name: 'Next Artist',
                 data: []
