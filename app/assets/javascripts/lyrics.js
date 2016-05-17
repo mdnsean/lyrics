@@ -51,7 +51,8 @@ var code = (function() {
         window.chart = new Highcharts.Chart({
             chart: {
                 renderTo: container,
-                height: 400
+                height: 200,
+                type: 'bar'
             },
             xAxis: {
                 categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -61,7 +62,34 @@ var code = (function() {
                 data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
             }]
         });
+
+        window.chart = new Highcharts.Chart({
+            chart: {
+                renderTo: container2,
+                height: 200,
+                type: 'bar'
+            },
+            title: {
+                text: 'Popular Healthy Murder Weapons'
+            },
+            xAxis: {
+                categories: ['Oranges', 'Bananas', 'Candy Corns']
+            },
+            yAxis: {
+                title: {
+                    text: 'Fruit eaten'
+                }
+            },
+            series: [{
+                name: 'Sean',
+                data: [6,1,9]
+            }, {
+                name: 'David',
+                data: [3,2,3]
+            }]
+        });
     };
+
 
 
     var start = function() {
