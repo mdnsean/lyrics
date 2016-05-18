@@ -6,7 +6,8 @@ class ArtistsController < ApplicationController
 
     def show
         @fav_words = Wordcount.select('word, count').
-                   where('artist_id = ? and length(word) > 4', params[:id]).
+                   where('artist_id = ? and length(word) >= ?',
+                   params[:id], params[:min].to_i).
                    order(count: :desc).limit(8)
         @longest_words = Wordcount.where(artist_id: params[:id]).
                    order('length(word) desc').limit(8)

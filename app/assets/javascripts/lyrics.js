@@ -19,8 +19,10 @@ var code = (function() {
     var selectArtist = function(e) {
         if (e.target !== e.currentTarget) {    
             var artistId = e.target.name;
+            var minLength = document.getElementById("min-word-length").value;
             var data = {
-                id: artistId
+                id: artistId,
+                min: minLength
             };
             var onload = function(xhr) {
                 if (xhr.status === 200) {
@@ -30,7 +32,7 @@ var code = (function() {
                     console.log("Status code: " + xhr.statusText);
                 }
             };
-            makeAjaxRequest('GET', '/artists/' + artistId, data, onload);
+            makeAjaxRequest('GET', '/artists/' + artistId + '?min=' + minLength, data, onload);
 
         }
         e.stopPropagation();
