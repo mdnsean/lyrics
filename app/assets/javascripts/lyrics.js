@@ -25,7 +25,7 @@ var code = (function() {
             var onload = function(xhr) {
                 if (xhr.status === 200) {
                     var response = (JSON.parse(xhr.responseText));
-                    displayWordcounts(response.wc_data, response.artist);
+                    displayFavWords(response.fav_words, response.artist);
                 } else {
                     console.log("Status code: " + xhr.statusText);
                 }
@@ -37,28 +37,28 @@ var code = (function() {
     };
 
     // artists#show
-    var displayWordcounts = function(wc_data, artist) {
-        var table = document.getElementById("wc-table");
-        table.innerHTML = "";
-        table.innerHTML += artist.name
+    var displayFavWords = function(wc_data, artist) {
+        // var table = document.getElementById("wc-table");
+        // table.innerHTML = "";
+        // table.innerHTML += artist.name
 
         var words = [];
         var counts = [];
         for (var i = 0; i < wc_data.length; i++) {
-            table.innerHTML += "<tr><td>" + wc_data[i].word
-                            + "</td><td>" + wc_data[i].count
-                            + "</td></tr>";
+            // table.innerHTML += "<tr><td>" + wc_data[i].word
+            //                 + "</td><td>" + wc_data[i].count
+            //                 + "</td></tr>";
             words.push(wc_data[i].word);
             counts.push(wc_data[i].count);
         }
-        initHighCharts(words, counts, artist.name)
+        getFavWordsChart(words, counts, artist.name);
     };
 
     // Highcharts
-    var initHighCharts = function(words, counts, artist_name) {
+    var longestWordCharts = function(words, counts, artist_name) {
         window.chart = new Highcharts.Chart({
             chart: {
-                renderTo: container,
+                renderTo: longest-words,
                 height: 400,
                 type: 'bar'
             },
@@ -73,37 +73,37 @@ var code = (function() {
                     text: 'Word Frequency'
                 }
             },
-            series: [{
+            series: [
+            {
                 name: artist_name,
                 data: counts
-            }, {
-                name: 'Next Artist',
-                data: []
-            }]
+            }
+            ]
         });
+    };
+
+
+    var getFavWordsChart = function(words, counts, artist_name) {
         window.chart = new Highcharts.Chart({
             chart: {
-                renderTo: container2,
+                renderTo: 'fav-words',
                 height: 400,
                 type: 'bar'
             },
             title: {
-                text: 'Popular Healthy Murder Weapons'
+                text: artist_name + '\'s favorite words'
             },
             xAxis: {
-                categories: ['Oranges', 'Bananas', 'Candy Corns']
+                categories: words
             },
             yAxis: {
                 title: {
-                    text: 'Fruit eaten'
+                    text: 'Word Frequency'
                 }
             },
             series: [{
-                name: 'Sean',
-                data: [6,1,9]
-            }, {
-                name: 'David',
-                data: [3,2,3]
+                name: artist_name,
+                data: counts
             }]
         });
     };
@@ -112,7 +112,6 @@ var code = (function() {
 
     var start = function() {
         attachSelectArtistHandler();
-        initHighCharts();
     };
 
     return {
