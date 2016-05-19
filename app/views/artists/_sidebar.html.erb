@@ -1,0 +1,13 @@
+<div id="sidebar-container">
+  Minimum Word Length<input id="min-word-length">
+  <ul id="artist-list">Choose Artist
+    <% @artists.each do |artist| %>
+      <li>
+        <button class="get-artist-button" name="<%= artist.id %>">
+          <%= artist.name %>
+        </button>
+        <%= button_to "X", artist_path(artist.id), method: :delete, class: 'x-button' %>
+      </li>
+    <% end %>
+  </ul>
+</div>
