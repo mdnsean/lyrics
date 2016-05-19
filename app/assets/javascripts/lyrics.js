@@ -27,7 +27,7 @@ var code = (function() {
             var onload = function(xhr) {
                 if (xhr.status === 200) {
                     var response = (JSON.parse(xhr.responseText));
-                    displayFavWords(response.fav_words, response.artist);
+                    displayFavWords(response.fav_words, response.artist, minLength);
                 } else {
                     console.log("Status code: " + xhr.statusText);
                 }
@@ -39,7 +39,7 @@ var code = (function() {
     };
 
     // artists#show
-    var displayFavWords = function(wc_data, artist) {
+    var displayFavWords = function(wc_data, artist, minLength) {
         // var table = document.getElementById("wc-table");
         // table.innerHTML = "";
         // table.innerHTML += artist.name
@@ -54,12 +54,12 @@ var code = (function() {
             counts.push(wc_data[i].count);
             wc_2d_arr.push([wc_data[i].word, wc_data[i].count]);
         }
-        getFavWordsChart(words, counts, artist.name);
-        getDonutChart(wc_2d_arr, artist.name);
+        getFavWordsChart(words, counts, artist.name, minLength);
+        getDonutChart(wc_2d_arr, artist.name, minLength);
     };
 
     // Highcharts
-    var getFavWordsChart = function(words, counts, artist_name) {
+    var getFavWordsChart = function(words, counts, artist_name, minLength) {
         window.chart = new Highcharts.Chart({
             chart: {
                 renderTo: 'fav-words',
@@ -68,6 +68,9 @@ var code = (function() {
             },
             title: {
                 text: artist_name + '\'s favorite words'
+            },
+            subtitle: {
+                text: 'minimum length: ' + minLength
             },
             xAxis: {
                 categories: words
@@ -84,7 +87,7 @@ var code = (function() {
         });
     };
 
-    var getDonutChart = function(wc_2d_arr, artist_name) {
+    var getDonutChart = function(wc_2d_arr, artist_name, minLength) {
         window.chart = new Highcharts.Chart({
             chart: {
                 renderTo: 'donut-chart',
@@ -100,7 +103,7 @@ var code = (function() {
 
             },
             subtitle: {
-                text: 'subtitle 3D donut in Highcharts'
+                text: 'minimum length: ' + minLength
             },
             plotOptions: {
                 pie: {
