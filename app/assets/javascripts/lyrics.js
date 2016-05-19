@@ -44,7 +44,7 @@ var code = (function() {
         // table.innerHTML = "";
         // table.innerHTML += artist.name
 
-        var words = [], counts = [], wc_2d_arr = []
+        var words = [], counts = [], wc_2d_arr = [];
 
         for (var i = 0; i < wc_data.length; i++) {
             // table.innerHTML += "<tr><td>" + wc_data[i].word
@@ -54,15 +54,15 @@ var code = (function() {
             counts.push(wc_data[i].count);
             wc_2d_arr.push([wc_data[i].word, wc_data[i].count]);
         }
-        getFavWordsChart(words, counts, artist.name, minLength);
+        getBarChart(words, counts, artist.name, minLength);
         getDonutChart(wc_2d_arr, artist.name, minLength);
     };
 
     // Highcharts
-    var getFavWordsChart = function(words, counts, artist_name, minLength) {
+    var getBarChart = function(words, counts, artist_name, minLength) {
         window.chart = new Highcharts.Chart({
             chart: {
-                renderTo: 'fav-words',
+                renderTo: 'bar-chart',
                 height: 400,
                 type: 'bar'
             },
