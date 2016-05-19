@@ -44,47 +44,21 @@ var code = (function() {
         // table.innerHTML = "";
         // table.innerHTML += artist.name
 
-        var words = [];
-        var counts = [];
+        var words = [], counts = [], wc_2d_arr = []
+
         for (var i = 0; i < wc_data.length; i++) {
             // table.innerHTML += "<tr><td>" + wc_data[i].word
             //                 + "</td><td>" + wc_data[i].count
             //                 + "</td></tr>";
             words.push(wc_data[i].word);
             counts.push(wc_data[i].count);
+            wc_2d_arr.push([wc_data[i].word, wc_data[i].count]);
         }
         getFavWordsChart(words, counts, artist.name);
+        getDonutChart(wc_2d_arr, artist.name);
     };
 
     // Highcharts
-    var longestWordCharts = function(words, counts, artist_name) {
-        window.chart = new Highcharts.Chart({
-            chart: {
-                renderTo: longest-words,
-                height: 400,
-                type: 'bar'
-            },
-            title: {
-                text: 'Everyone\'s Favorite Words'
-            },
-            xAxis: {
-                categories: words
-            },
-            yAxis: {
-                title: {
-                    text: 'Word Frequency'
-                }
-            },
-            series: [
-            {
-                name: artist_name,
-                data: counts
-            }
-            ]
-        });
-    };
-
-
     var getFavWordsChart = function(words, counts, artist_name) {
         window.chart = new Highcharts.Chart({
             chart: {
@@ -106,6 +80,37 @@ var code = (function() {
             series: [{
                 name: artist_name,
                 data: counts
+            }]
+        });
+    };
+
+    var getDonutChart = function(wc_2d_arr, artist_name) {
+        window.chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'donut-chart',
+                height: 400,
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 45
+                }
+            },
+            title: {
+                    text: artist_name + '\'s favorite words'
+
+            },
+            subtitle: {
+                text: 'subtitle 3D donut in Highcharts'
+            },
+            plotOptions: {
+                pie: {
+                    innerSize: 100,
+                    depth: 45
+                }
+            },
+            series: [{
+                name: 'Word Frequency',
+                data: wc_2d_arr
             }]
         });
     };
