@@ -1,7 +1,3 @@
-#charts-container {
-  /*float: left;*/
-}
-
 #chart-tabs {
   position: relative;   
   min-height: 200px; /* This part sucks */
