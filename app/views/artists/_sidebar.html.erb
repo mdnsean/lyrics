@@ -1,5 +1,6 @@
 <div id="sidebar-container">
-  Minimum Word Length<input id="min-word-length">
+  Minimum Word Length
+  <input type="range" min="1" max="10" value="1" id="min-word-length">
   <ul id="artist-list">Choose Artist
     <% @artists.each do |artist| %>
       <li>
