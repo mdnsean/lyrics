@@ -16,6 +16,7 @@ var code = (function() {
         parent.addEventListener('click', selectArtist, false);
     };
 
+    // calls controller: artists#show
     var selectArtist = function(e) {
         if (e.target !== e.currentTarget) {    
             var artistId = e.target.name;
@@ -27,7 +28,9 @@ var code = (function() {
             var onload = function(xhr) {
                 if (xhr.status === 200) {
                     var response = (JSON.parse(xhr.responseText));
-                    displayFavWords(response.fav_words, response.artist, minLength);
+                    var filtered_wc_data = calcSlider(response.fav_words, minLength);
+                    // cacheWc()?
+                    displayFavWords(filtered_wc_data, response.artist, minLength);
                 } else {
                     console.log("Status code: " + xhr.statusText);
                 }
@@ -38,7 +41,22 @@ var code = (function() {
         e.stopPropagation();
     };
 
-    // artists#show
+    // Input: all wc, sorted by freq
+    // Output (Filter): first 8 words >= minLength
+    var calcSlider = function(wc_data, minLength) {
+        var result = [];
+        for (var i = 0; i < wc_data.length; i++) {
+            if (result.length >= 8) {
+                return result;
+            }
+            if (wc_data[i].word.length >= minLength) {
+                result.push(wc_data[i]);
+            }
+        }
+        return result;
+    };
+
+    // Render Highcharts for selected artist
     var displayFavWords = function(wc_data, artist, minLength) {
         // var table = document.getElementById("wc-table");
         // table.innerHTML = "";
