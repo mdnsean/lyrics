@@ -1,5 +1,10 @@
 var code = (function() {
 
+    // Whenever an artist is selected, retrieve and store their wc_data in this global var
+    // This allows quick data loading whenever user moves minLength slider
+    var global_wc_data = null;
+    var global_artist_name = null;
+
     var makeAjaxRequest = function(method, url, data, onload) {
         var xhr = new XMLHttpRequest();
         xhr.onload = function() {
@@ -28,9 +33,11 @@ var code = (function() {
             var onload = function(xhr) {
                 if (xhr.status === 200) {
                     var response = (JSON.parse(xhr.responseText));
-                    var filtered_wc_data = calcSlider(response.fav_words, minLength);
-                    // cacheWc()?
-                    displayFavWords(filtered_wc_data, response.artist, minLength);
+                    global_wc_data = response.fav_words; // store wc_data of currently selected artist
+                    global_artist_name = response.artist;
+                    
+                    var filtered_wc_data = calcSlider(global_wc_data, minLength);
+                    displayFavWords(filtered_wc_data, global_artist_name, minLength);
                 } else {
                     console.log("Status code: " + xhr.statusText);
                 }
