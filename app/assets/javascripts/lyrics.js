@@ -16,12 +16,19 @@ var code = (function() {
         xhr.send(JSON.stringify(data));
     };
 
+    // Re-renders Highcharts
     var attachSelectArtistHandler = function() {
         var parent = document.getElementById("artist-list");
         parent.addEventListener('click', selectArtist, false);
     };
 
-    // calls controller: artists#show
+    // Re-render Highcharts
+    var attachSliderChangeHandler = function() {
+        var slider = document.getElementById('min-word-length');
+        slider.addEventListener('change', renderHighcharts, false); 
+    }
+
+    // Calls controller: artists#show
     var selectArtist = function(e) {
         if (e.target !== e.currentTarget) {    
             var artistId = e.target.name;
@@ -33,11 +40,9 @@ var code = (function() {
             var onload = function(xhr) {
                 if (xhr.status === 200) {
                     var response = (JSON.parse(xhr.responseText));
-                    global_wc_data = response.fav_words; // store wc_data of currently selected artist
-                    global_artist_name = response.artist;
-                    
-                    var filtered_wc_data = calcSlider(global_wc_data, minLength);
-                    displayFavWords(filtered_wc_data, global_artist_name, minLength);
+                    global_wc_data = response.fav_words;
+                    global_artist_name = response.artist.name;
+                    renderHighcharts();
                 } else {
                     console.log("Status code: " + xhr.statusText);
                 }
@@ -48,8 +53,8 @@ var code = (function() {
         e.stopPropagation();
     };
 
-    // Input: all wc, sorted by freq
-    // Output (Filter): first 8 words >= minLength
+    // Input: All wc, sorted by freq
+    // Output (Filter): First 8 words >= minLength
     var calcSlider = function(wc_data, minLength) {
         var result = [];
         for (var i = 0; i < wc_data.length; i++) {
@@ -63,27 +68,23 @@ var code = (function() {
         return result;
     };
 
-    // Render Highcharts for selected artist
-    var displayFavWords = function(wc_data, artist, minLength) {
-        // var table = document.getElementById("wc-table");
-        // table.innerHTML = "";
-        // table.innerHTML += artist.name
+    // Called whenever artist clicked / slider moved
+    var renderHighcharts = function() {
+        var minLength = document.getElementById('min-word-length').value;
+        var filtered_wc_data = calcSlider(global_wc_data, minLength);
 
         var words = [], counts = [], wc_2d_arr = [];
 
-        for (var i = 0; i < wc_data.length; i++) {
-            // table.innerHTML += "<tr><td>" + wc_data[i].word
-            //                 + "</td><td>" + wc_data[i].count
-            //                 + "</td></tr>";
-            words.push(wc_data[i].word);
-            counts.push(wc_data[i].count);
-            wc_2d_arr.push([wc_data[i].word, wc_data[i].count]);
+        for (var i = 0; i < filtered_wc_data.length; i++) {
+            words.push(filtered_wc_data[i].word);
+            counts.push(filtered_wc_data[i].count);
+            wc_2d_arr.push([filtered_wc_data[i].word, filtered_wc_data[i].count]);
         }
-        getBarChart(words, counts, artist.name, minLength);
-        getDonutChart(wc_2d_arr, artist.name, minLength);
+        getBarChart(words, counts, global_artist_name, minLength);
+        getDonutChart(wc_2d_arr, global_artist_name, minLength);
     };
 
-    // Highcharts
+    // Highcharts Code
     var getBarChart = function(words, counts, artist_name, minLength) {
         window.chart = new Highcharts.Chart({
             chart: {
@@ -143,10 +144,9 @@ var code = (function() {
         });
     };
 
-
-
     var start = function() {
         attachSelectArtistHandler();
+        attachSliderChangeHandler();
     };
 
     return {
