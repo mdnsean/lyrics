@@ -98,6 +98,11 @@ var code = (function() {
             subtitle: {
                 text: 'minimum length: ' + minLength
             },
+            plotOptions: {
+                series: {
+                    animation: false
+                }
+            },
             xAxis: {
                 categories: words
             },
@@ -135,6 +140,9 @@ var code = (function() {
                 pie: {
                     innerSize: 100,
                     depth: 45
+                },
+                series: {
+                    animation: false
                 }
             },
             series: [{
