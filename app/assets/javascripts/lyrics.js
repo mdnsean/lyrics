@@ -82,6 +82,7 @@ var code = (function() {
         }
         getBarChart(words, counts, global_artist_name, minLength);
         getDonutChart(wc_2d_arr, global_artist_name, minLength);
+        getBubbleChart();
     };
 
     // Highcharts Code
@@ -130,8 +131,7 @@ var code = (function() {
                 }
             },
             title: {
-                    text: artist_name + '\'s favorite words'
-
+                text: artist_name + '\'s favorite words'
             },
             subtitle: {
                 text: 'minimum length: ' + minLength
@@ -148,6 +148,69 @@ var code = (function() {
             series: [{
                 name: 'Word Frequency',
                 data: wc_2d_arr
+            }]
+        });
+    };
+
+    var getBubbleChart = function() {
+        window.chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'bubble-chart',
+                height: 400,
+                type: 'bubble',
+                plotBorderWidth: 1,
+                zoomType: 'xy'
+            },
+            legend: {
+                enabled: false
+            },
+            title: {
+                text:  ': big words'
+            },
+            xAxis: {
+                gridLineWidth: 1,
+                title: {
+                    text: 'Word Size'
+                },
+                labels: {
+                    format: '{value}'
+                },
+            },
+            yAxis: {
+                startOnTick: false,
+                endOnTick: false,
+                title: {
+                    text: 'Frequency'
+                },
+                labels: {
+                    format: '{value}'
+                },
+                maxPadding: 0.2,
+            },
+            tooltip: {
+                useHTML: true,
+                headerFormat: '<table>',
+                pointFormat: '<tr><th colspan="2"><h3>{point.word}</h3></th></tr>' +
+                    '<tr><th>Word Size:</th><td>{point.x}</td></tr>' +
+                    '<tr><th>Frequency:</th><td>{point.y}</td></tr>',
+                footerFormat: '</table>',
+                followPointer: true
+            },
+            plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.abbrev}'
+                    }
+                }
+            },
+            series: [{
+                data: [
+                    { word: 'mothaf', x: 16, y: 2, size: 6, freq: 20, abbrev: 'mo'},
+                    { word: 'mothaf', size: 5, freq: 20, abbrev: 'mo'}
+                    // { x: 95, y: 95, z: 13.8, name: 'BE', country: 'Belgium' },
+                    // { x: 86.5, y: 102.9, z: 14.7, name: 'DE', country: 'Germany' },
+                ]
             }]
         });
     };
