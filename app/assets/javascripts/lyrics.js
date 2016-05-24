@@ -25,7 +25,7 @@ var code = (function() {
     // Re-render Highcharts
     var attachSliderChangeHandler = function() {
         var slider = document.getElementById('min-word-length');
-        slider.addEventListener('change', renderHighcharts, false); 
+        slider.addEventListener('change', renderHighcharts, false);
     }
 
     // Calls controller: artists#show
@@ -41,7 +41,7 @@ var code = (function() {
                 if (xhr.status === 200) {
                     var response = (JSON.parse(xhr.responseText));
                     global_wc_data = response.fav_words;
-                    global_artist_name = response.artist.name;
+                    global_artist_name = response.artist_name;
                     renderHighcharts();
                 } else {
                     console.log("Status code: " + xhr.statusText);
@@ -71,6 +71,8 @@ var code = (function() {
     // Called whenever artist clicked / slider moved
     var renderHighcharts = function() {
         var minLength = document.getElementById('min-word-length').value;
+        var minDisplay = document.getElementById('min-display');
+        minDisplay.textContent = minLength;
         var filtered_wc_data = calcSlider(global_wc_data, minLength);
 
         var words = [], counts = [], wc_2d_arr = [];
@@ -93,10 +95,10 @@ var code = (function() {
                 type: 'bar'
             },
             title: {
-                text: artist_name + '\'s favorite words'
+                text: artist_name + '\'s Favorite Words'
             },
             subtitle: {
-                text: 'minimum length: ' + minLength
+                text: 'Minimum Length: ' + minLength
             },
             plotOptions: {
                 series: {
@@ -130,10 +132,10 @@ var code = (function() {
                 }
             },
             title: {
-                text: artist_name + '\'s favorite words'
+                text: artist_name + '\'s Favorite Words'
             },
             subtitle: {
-                text: 'minimum length: ' + minLength
+                text: 'Minimum Length: ' + minLength
             },
             plotOptions: {
                 pie: {

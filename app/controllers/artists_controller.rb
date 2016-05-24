@@ -14,9 +14,9 @@ class ArtistsController < ApplicationController
         #            order(count: :desc).limit(8)
         # @longest_words = Wordcount.where(artist_id: params[:id]).
         #            order('length(word) desc').limit(8)
-        @artist = Artist.where(id: params[:id])[0]
+        @artist_name = Artist.where(id: params[:id])[0].name.titleize
         render json: {fav_words: @fav_words,
-                      artist: @artist}
+                      artist_name: @artist_name}
     end
 
     def search

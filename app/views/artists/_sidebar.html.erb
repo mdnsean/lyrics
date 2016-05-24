@@ -1,11 +1,11 @@
 <div id="sidebar-container">
-  Minimum Word Length
-  <input type="range" min="1" max="10" value="1" id="min-word-length">
+  Minimum Word Length: <span id="min-display">5</span>
+  <input type="range" min="1" max="10" id="min-word-length">
   <ul id="artist-list">Choose Artist
     <% @artists.each do |artist| %>
       <li>
         <button class="get-artist-button" name="<%= artist.id %>">
-          <%= artist.name %>
+          <%= artist.name.titleize %>
         </button>
         <%= button_to "X", artist_path(artist.id), method: :delete, class: 'x-button' %>
       </li>
