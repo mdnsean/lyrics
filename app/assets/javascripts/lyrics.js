@@ -2,7 +2,7 @@ var code = (function() {
 
     // Whenever an artist is selected, retrieve and store their wc_data in this global var
     // This allows quick data loading whenever user moves minLength slider
-    var global_wc_data = null;
+    var global_wc_data = null; // All WC, sorted by freq
     var global_artist_name = null;
 
     var makeAjaxRequest = function(method, url, data, onload) {
@@ -73,16 +73,29 @@ var code = (function() {
         var minLength = document.getElementById('min-word-length').value;
         var filtered_wc_data = calcSlider(global_wc_data, minLength);
 
-        var words = [], counts = [], wc_2d_arr = [];
+        var words = [], counts = [], wc_2d_arr = [], arr_bubble = [];
 
         for (var i = 0; i < filtered_wc_data.length; i++) {
             words.push(filtered_wc_data[i].word);
             counts.push(filtered_wc_data[i].count);
             wc_2d_arr.push([filtered_wc_data[i].word, filtered_wc_data[i].count]);
         }
+
         getBarChart(words, counts, global_artist_name, minLength);
         getDonutChart(wc_2d_arr, global_artist_name, minLength);
-        getBubbleChart();
+        
+        for (var j = 0; j < global_wc_data.length; j++) {
+            arr_bubble.push({
+                word: global_wc_data[j].word,
+                x: global_wc_data[j].word.length,
+                y: global_wc_data[j].count,
+                z: 1
+            });
+        }
+        console.log('bubble array');
+        console.log(arr_bubble);
+        arb = arr_bubble;
+        getBubbleChart(arr_bubble, global_artist_name);
     };
 
     // Highcharts Code
@@ -152,7 +165,7 @@ var code = (function() {
         });
     };
 
-    var getBubbleChart = function() {
+    var getBubbleChart = function(wc_data, artist_name) {
         window.chart = new Highcharts.Chart({
             chart: {
                 renderTo: 'bubble-chart',
@@ -200,17 +213,18 @@ var code = (function() {
                 series: {
                     dataLabels: {
                         enabled: true,
-                        format: '{point.abbrev}'
+                        format: '{point.word}'
                     }
                 }
             },
             series: [{
-                data: [
-                    { word: 'mothaf', x: 16, y: 2, size: 6, freq: 20, abbrev: 'mo'},
-                    { word: 'mothaf', size: 5, freq: 20, abbrev: 'mo'}
-                    // { x: 95, y: 95, z: 13.8, name: 'BE', country: 'Belgium' },
-                    // { x: 86.5, y: 102.9, z: 14.7, name: 'DE', country: 'Germany' },
-                ]
+                data: wc_data
+                // [
+                //     { word: 'mothafmothafmoa', x: 16, y: 2, z: 1},
+                //     { word: 'mothaf', size: 5, freq: 20, abbrev: 'mo'}
+                //     // { x: 95, y: 95, z: 13.8, name: 'BE', country: 'Belgium' },
+                //     // { x: 86.5, y: 102.9, z: 14.7, name: 'DE', country: 'Germany' },
+                // ]
             }]
         });
     };
