@@ -22,18 +22,32 @@
     </div>
 
     <div class="col-lg-2" id="sidebar-container">
-      Minimum Word Length: <span id="min-display">5</span>
+      
+      <div class="row">
+        <h4>Minimum Word Length: <span id="min-display">5</span></h4>
+      </div>
+
       <input type="range" min="1" max="10" id="min-word-length">
-      <ul id="artist-list">Choose Artist
-        <% @artists.each do |artist| %>
-          <li>
-            <button class="get-artist-button" name="<%= artist.id %>">
-              <%= artist.name.titleize %>
-            </button>
-            <%= button_to "X", artist_path(artist.id), method: :delete, class: 'x-button' %>
-          </li>
-        <% end %>
-      </ul>
+      
+      <div class="row">
+        <h4>Choose Artist</h4>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-2 list-group" id="x-button-list">
+          <% @artists.each do |artist| %>
+              <%= button_to "X", artist_path(artist.id), method: :delete, class: "list-group-item" %>
+          <% end %>
+        </div>
+        
+        <div class="col-lg-10 list-group" id="artist-list">
+          <% @artists.each do |artist| %>
+              <button type="button" class="list-group-item get-artist-button" name="<%= artist.id %>">
+                <%= artist.name.titleize %>
+              </button>
+          <% end %>
+        </div>
+      </div>
     </div>
 
     <div class="col-lg-8" id="charts-container">

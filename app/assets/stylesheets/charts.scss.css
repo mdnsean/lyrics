@@ -1,3 +1,11 @@
+/* Clears and Floats */
+
+.get-artist-button {
+  float: left;
+}
+
+/* Chart Tabs */
+
 #chart-tabs {
   position: relative;   
   min-height: 200px; /* This part sucks */
